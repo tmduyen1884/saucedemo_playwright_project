@@ -1,0 +1,14 @@
+# Core & Playwright
+playwright==1.65.0
+pytest==9.2.0
+pytest-playwright==0.10.0
+
+# Tối ưu tốc độ & Độ ổn định
+pytest-xdist==3.8.0
+pytest-rerunfailures==16.7
+
+# Báo cáo & Quản lý cấu hình
+pytest-html==4.2.0
+allure-pytest
+pytest-base-url==2.1.0
+python-dotenv==1.1.0

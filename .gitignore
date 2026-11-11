@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches & Environments
+.pytest_cache/
+.venv/
+env/
+venv/
+ENV/
+
+# Playwright & Testing Artifacts
+test-results/
+playwright-report/
+allure-results/
+allure-report/
+
+# Local sensitive states
+data/state.json
