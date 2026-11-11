@@ -10,34 +10,30 @@ TEMP_DIR = Path(__file__).parent.parent / "data"
 
 # ==============================================================================
 # KỸ NĂNG 1: XỬ LÝ MỞ TAB MỚI / CỬA SỔ POPUP (expect_popup)
-# Thực chiến ngay trên SauceDemo: Click link Twitter/X ở footer
 # ==============================================================================
-@allure.title("UI Phức tạp 1: Mở Tab mới (Popup) trên SauceDemo")
-def test_open_new_tab(login_page):
+@allure.title("UI Phức tạp 1: Mở Tab mới (Popup) và chuyển ngữ cảnh")
+def test_open_new_tab(page: Page):
     """
-    Kịch bản: Sau khi đăng nhập, cuộn xuống footer và click vào link Twitter/X.
-    Playwright sẽ lắng nghe sự kiện mở tab mới và chuyển ngữ cảnh sang tab đó.
+    Kịch bản: Mở trang có liên kết mở tab mới (target='_blank').
+    Playwright sẽ lắng nghe sự kiện expect_popup() và tương tác trên tab mới.
     """
-    page = login_page.page
-    login_page.login("standard_user", "secret_sauce")
-
-    twitter_link = page.locator("[data-test='social-twitter']")
-    twitter_link.scroll_into_view_if_needed()
+    page.goto("https://the-internet.herokuapp.com/windows")
 
     # Lắng nghe sự kiện mở tab mới trước khi thực hiện click
     with page.expect_popup() as popup_info:
-        twitter_link.click()
+        page.locator("a:has-text('Click Here')").click()
 
     # Nhận diện tab mới vừa bật lên
     new_tab = popup_info.value
+    new_tab.wait_for_load_state()
 
-    # Chỉ cần chờ DOM sẵn sàng (không chờ toàn bộ trackers của Twitter/X để tránh timeout)
-    new_tab.wait_for_load_state("domcontentloaded")
-    assert "x.com" in new_tab.url or "twitter.com" in new_tab.url
+    # Kiểm tra nội dung trên tab mới
+    expect(new_tab.locator("h3")).to_have_text("New Window")
+    assert "/windows/new" in new_tab.url
 
     # Đóng tab mới, quay lại tab chính làm việc tiếp
     new_tab.close()
-    assert "inventory.html" in page.url
+    expect(page.locator("h3")).to_have_text("Opening a new window")
 
 
 # ==============================================================================
